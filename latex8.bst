@@ -7,7 +7,7 @@
 
 % ---------------------------------------------------------------
 %
-% no guarantee is given that the format corresponds perfectly to 
+% no guarantee is given that the format corresponds perfectly to
 % IEEE 8.5" x 11" Proceedings, but most features should be ok.
 %
 % ---------------------------------------------------------------
@@ -1099,7 +1099,7 @@ FUNCTION {begin.bib}
     'skip$
     { preamble$ write$ newline$ }
   if$
-  "\begin{thebibliography}{"  longest.label  * 
+  "\begin{thebibliography}{"  longest.label  *
   "}\setlength{\itemsep}{-1ex}\small" * write$ newline$
 }
 
@@ -1118,6 +1118,3 @@ EXECUTE {end.bib}
 
 % end of file latex8.bst
 % ---------------------------------------------------------------
-
-
-
