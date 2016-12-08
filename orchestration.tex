@@ -76,9 +76,11 @@ Now there are multiple cloud service providers such as Google Cloud, Amazon Web 
 The operators of these cloud services typically have their own data centers, each consisting of thousands of physical machines connected via a high speed and very low latency network such as Infiniband (IB) ~\cite{intro_infiniband}.
 Data center operators use various tools to automate the process of management, provisioning and scaling the resources for their customers.
 
-Orchestration tools have been developed to ease the automation of operating a data center.
-Tools such as VMware vRealize Orchestrator and OpenStack's Heat have been used to manage VMware vSphere or Linux kernel virtual machines ~\cite{openstack, vrealize}.
-Container Orchestration tools such as Docker Swarm, Kubernetes, Mesos have been developed to manage containers on mostly Linux machines, but also increasingly on Windows machines as well ~\cite{docker_swarm, kubernetes, mesos}.
+Orchestration tools have been developed to ease the operation of a data center.
+Tools such as OpenStack's Heat have been used to manage Linux kernel virtual machines ~\cite{openstack}.
+There are many other such tools such as Chef and Ansible for virtual machines ~\cite{chef, ansible}.
+Container Orchestration tools such as Docker Swarm, Kubernetes, Mesos have been developed to manage containers on mostly Linux machines ~\cite{docker_swarm, kubernetes, mesos}.
+In this survey however, we shall focus more on orchestration of containers than virtual machines.
 
 Using these orchestration tools, data center operators can boot up virtual machines or containers on the physical machines, and control the entire the data center as a single entity, provision the necessary resources, and deploy and managing applications.
 These orchestration tools can also be used to automate replication of processes, fault tolerance, failure detection and recovery, live migration of processes or entire virtual machines between physical machines, and also set up coordination between the processes to make the development of applications for the distributed system easier ~\cite{live_migration, xen}.
@@ -87,7 +89,7 @@ Some orchestration tools also enforce quotas for processes, ensure that Service-
 In this survey, the performance of these orchestration tools shall be compared.
 Also, these orchestration tools may also have different guarantees of tolerance when there is a failure or network partition.
 According to the CAP theorem, only two out of three: presence of network partitions, availability and consistency can be guaranteed by any distributed system ~\cite{CAP_theorem}.
-In which case, there may be different methods the orchestration tools employ to recover or provide consistency or reliability, offering various combinations of two out of the three things.
+In which case, there may be different methods the orchestration tools employ for error recovery and maintain high reliability, offering various combinations of two out of the three things for applications to easily support.
 
 In the next section, we shall see some of the past work on virtualization, the use of virtual machines and containers, and the approaches taken by the different virtualization technologies to enforce isolation between applications.
 In Section 3, we shall describe how virtual machines and containers controlled by the various orchestration tools.
@@ -105,6 +107,8 @@ We then discuss possible future work in the field in Section 5, and we then conc
 \section{Background}
 
 The increasing proliferation and popularity of virtualization technology were necessary for the data center, and cloud service providers to thrive.
+Virtual machines allowed for running more isolated virtual operating systems or applications on lesser number of physical machines.
+The use of these virtual machines could be leased out to third-parties, providing a revenue stream for people who may have powerful physical machines but are unable to push them to their full potential.
 Consequently, cloud computing has made the concept of computing as a utility possible ~\cite{berkeley_cloud}.
 Virtualization, in this context, is the task of creating virtual hardware and running actual operating systems and applications on top of them.
 Each of these virtual machines is isolated and independent from one another and are managed by a hypervisor that is running on the physical hardware or on the host operating system ~\cite{xen}.
