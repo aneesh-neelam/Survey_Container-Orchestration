@@ -97,8 +97,8 @@ We then discuss possible future work in the field in Section 5, and we then conc
 
 \begin{figure*}
 \centering
-  \includegraphics[width=\textwidth]{container-vs-vm.jpg}
-    \caption{Differences between Virtual Machines and Containers~\cite{intro_containerisation}
+  \includegraphics[width=\textwidth]{container_vm}
+    \caption{Differences between Virtual Machines and Containers ~\cite{intro_containerisation}}
       \label{overflow}}
 \end{figure*}
 
@@ -112,7 +112,7 @@ Consequently, cloud computing has made the concept of computing as a utility pos
 Virtualization, in this context, is the task of creating virtual hardware and running actual operating systems and applications on top of them.
 Each of these virtual machines is isolated and independent from one another and are managed by a hypervisor that is running on the physical hardware or on the host operating system ~\cite{xen}.
 
-Virtualization technology is now decades old, with every major operating system that runs on servers having inbuilt virtualization support without the need for a third-party hypervisor.
+Virtualization technology is now decades old, with every major operating system that runs on servers having built-in virtualization support without the need for a third-party hypervisor.
 For example, the Linux kernel has KVM and Microsoft Windows Server has Hyper-V.
 Both also have well-documented endpoints for various front-ends to interface with, providing data center operators and server administrators with many tools to automate and manage their machines.
 
@@ -121,7 +121,7 @@ Container enngines that provide a cross-platform frontend but make use of the re
 
 Virtual machines are a complete hardware virtualization, and there is a full-fledged guest operating system on which applications are run. Virtual machines enable the use of legacy applications that require legacy operating systems that only run on legacy hardware.
 The necessary legacy hardware can be emulated by the hypervisor, allowing the unmodified operating systems and applications to be run.
-There is also paravirtualization where a significant ioncrese of performance can be achieved with some changes to the guest operating system, but it still does not entail modifying the application.
+There is also paravirtualization where a significant ioncrese of performance can be achieved with some changes to the guest operating system, but it still does not entail modifying the application ~\cite{xen}.
 
 However, containers provide the isolation of virtual machines without much of the overhead. There is no guest operating system, and the host kernel itself enforces isolation ~\cite{intro_containerisation}.
 However, that would also mean that the applications would have to be able to execute directly on the host operating system.
@@ -138,15 +138,80 @@ Some of the tools for containers we shall cover in this survey are Docker Swarm 
 %-------------------------------------------------------------------------
 \section{General Comparison}
 
+As we have seen in the previous section, virtual machines are full-fledged operating systems, each that contain their own set of libraries and run applications.
+These virtual machines are all isolated and are managed by the hypervisor running on the corresponding physical machine.
+Orchestration tools such as Openstack Heat ~\cite{openstack} or Ansible ~\cite{ansible} or Chef ~\cite{chef} can be used to manage all the hypervisors of a cluster of physical machines, thereby controlling the entire data center as one entity.
 
+\begin{figure}[thpb]
+  \centering
+  	\includegraphics[width=\columnwidth]{native_app_libs}
+    \caption{Applications running natively on OS with shared libraries ~\cite{container_shared_lib}}
+	\label{fig:native_app_libs}
+\end{figure}
+
+However, containers have one key advantage greatly increased their popularity and that is their significantly lower overhead when compared to virtual machines.
+This is especially true when two or more applications link with different versions of libraries, but the operating system provides shared libraries that is of a single version as depicted in Figure 2 ~\cite{container_shared_lib}.
+One can run the applications in different contexts by running each one in its own virtual machine, but the overhead of virtualization is very high.
+Containers allow the kernel-level isolation of applications \textbf{and their libraries}.
+Figure 3 illustrates the use of containers for this use case ~\cite{container_shared_lib}.
+
+\begin{figure}[thpb]
+  \centering
+  	\includegraphics[width=\columnwidth]{container_app_libs}
+    \caption{Containers of applications and libraries running on OS ~\cite{container_shared_lib}}
+	\label{fig:container_app_libs}
+\end{figure}
+
+Therefore, data center operators use a combination of virtual machines and containers on their physical clusters.
+Hence, orchestration tools for both are used in most data centers.
 
 \subsection{Virtual Machine Orchestration}
 
+As mentioned previously in this paper, the use of virtual machines is still necessary when a full-fledged guest operating system is needed.
+This is especially true when running legacy applications that require legacy operating systems and legacy hardware.
+But advances in automation and orchestration can be applied to machines that emulate legacy hardware as well.
 
+Ansible is an automation tool for managing massive physical clusters and deploying applications on them ~\cite{ansible}.
+It is made up of many components, not all relevant for this survey.
+We shall focus on the orchestration capabilities of Ansible.
+An admininstrator can execute hundreds or thousands of virtual machines, specifying an operating system and application image with a complex network configuration set up between them.
+Configuration is predetermined by the adminstrator, written into config file(s) and specified when running the orchestration tool.
+
+\begin{figure*}
+\centering
+  \includegraphics[width=\textwidth]{docker_swarm}
+    \caption{Overview of Docker Swarm ~\cite{platform9_dockerswarm_kubernetes}}
+      \label{overflow}}
+\end{figure*}
 
 \subsection{Container Orchestration}
 
+We shall compare Docker Swarm ~\cite{docker_swarm}, Kubernetes ~\cite{kubernetes} and Apache Mesos ~\cite{mesos}.
+Docker Swarm, Kubernetes and Mesos all have a master-slave architecture, where a small number of manager nodes control the rest of the cluster ~\cite{docker_swarm, kubernetes, mesos}.
 
+Docker Swarm is an extension of the Docker container engine itself and is trivial to set up.
+The Docker Container Engine must be installed on the nodes of the cluster, each of which must also be associated with a discovery service.
+The discovery service backend is what the swarm manager(and their replicas) and the nodes use to authenticate themselves as members of the swarm cluster.
+The swarm manager is the one that controls the other nodes of the cluster.
+Replicas of the swarm manager take over in case of a failure. ~\cite{docker_swarm}.
+Third party tools that maintain high availability of the swarm manager can be integrated into this setup ~\cite{platform9_dockerswarm_kubernetes}.
+
+One of the key advantages of Docker Swarm is how it can be interfaced with using the same Docker API.
+As depicted in Figure 4, the same Docker API that is used by so many frontends is the same one used to control Docker Swarm ~\cite{platform9_dockerswarm_kubernetes}.
+
+Kubernetes is a orchestration tool developed by engineers at Google.
+Like Docker Swarm, Kubernetes also works with the Docker Container Engine ~\cite{kubernetes}.
+It was originally for internal use only and was designed to orchestrate the use of their internal cluster, Borg ~\cite{borg}.
+But with the advances in containerization and the increasing use of containers to isolate applications, Google gave away some of the source code behind Kubernetes ~\cite{kubernetes_github}.
+As illustrated in Figure 5, Kubernetes has a master-slave architecture ~\cite{platform9_dockerswarm_kubernetes}.
+Pods are groups of containers that run on the nodes in the cluster ~\cite{kubernetes}.
+
+\begin{figure*}
+\centering
+  \includegraphics[width=\columnwidth]{kubernetes}
+    \caption{Overview of Kubernetes ~\cite{platform9_dockerswarm_kubernetes}}
+      \label{fig:kubernetes}}
+\end{figure*}
 
 %-------------------------------------------------------------------------
 \section{Evaluations}
