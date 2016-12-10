@@ -250,46 +250,108 @@ Mesos has frameworks for Hadoop and MPI, that application developers can use to 
 %-------------------------------------------------------------------------
 \section{Evaluations}
 
+Orchestration tools are vital for Developer Operations (DevOps).
+But there is a real dearth of research scholarly work on the orchestration tools mentioned previously here.
+Therefore, we have also referenced whitepapers, documentation provided to data center operators, and performance and scalability results from benchmarking organizations ~\cite{orchestration}.
+As we have already seen, Orchestration tools for the most part are quite similar in nature.
+All of them attempt to solve some of the same kinds of problems, and some also in similar or even identical manners.
 
+For many of the generic container use cases, one could work with Docker Swarm, Kubernetes and Mesos as all three can be configured to use the same Docker Container Engine ~\cite{docker_swarm, kubernetes, mesos}.
+And since containerization is an operating system feature, all container engines would have to use the same kernel interfaces to initialize and manage containers on a particular operating system ~\cite{intro_containerisation}.
+Hence, in this section we shall be going over some of the different methods the orchestration tools use to solve problems including those of performance and scalibility.
+Also, we shall be comparing their ease of use, their community support and their popularity with data center operators as well as application developers.
 
-\subsection{Performance}
+\subsection{Performance and Scalability}
 
+Virtual machines will obviously be slower than containers, hence we shall not be comparing between them.
+However, we shall be comparing the various container orchestration tools: Docker Swarm, Kubernetes and Mesos ~\cite{docker_swarm, kubernetes, mesos}.
 
-
-\subsection{Ease of Use}
-
-
+The developers of Docker Swarm claim that it can scale up to tens of thousands of containers with little performance degradation, whereas Kubernetes is an order of magnitude less scalable ~\cite{docker_swarm}.
+But, benchmarks have proven that Docker Swarm provides much better performance than Kubernetes ~\cite{dockerswarm_vs_kubernetes}.
 
 \subsection{Protocols used}
 
 
 
-\subsection{Use Cases}
+\subsection{Ease of use and other advantages}
 
+Ansible and Chef are used to manage applications running on virtual machines on physical machines in a data center ~\cite{ansible, chef}.
+Both are quite similar in their use cases.
+Chef is more full-fledged as it requires the use of the Chef Developer Kit to configure and describe a cluster ~\cite{chef}.
 
+Kubernetes, Docker Swarm and Mesos all can use same Docker Container Engine ~\cite{kubernets, docker_swarm, mesos}.
+While Mesos also has support for its own Mesos Container Engine, the use of Docker Container Engine is almost ubiquitous in the container community ~\cite{intro_docker}.
+The use of Docker Container Engine enables the use of the Docker repository for pulling commonly used configurations and applications on Docker.
+Since the Docker community is so vast, the documentation, technical support and compatibility is, in our opinion, in a good state.
+
+Kubernetes was developed by Google engineers for their internal use.
+It was originally used for building and testing internal Google code on their cluster Borg ~\cite{kubernetes, borg}.
+For more than a decade, Google has been using Kubernetes successfully to orchestrate their build and test machines in their cluster.
+Now with the increasing popularity of containers, Kubernetes is now available for anyone to use for their orchestration needs ~\cite{kubernetes_github}.
+With Google's stamp of support, and a growing community of adminintrators and developers, Kubernetes has become the most popular container orchestration tool ~\cite{openhub}.
+
+Kubernetes is more fully featured than Docker Swarm or Mesos ~\cite{kubernetes}.
+For example, Docker Swarm does not have a built-in monitoring agent that can also perform autoscaling of the containers based on the CPU usage or other factors.
+However, external monitoring tools can be used with Docker Swarm ~\cite{docker_swarm}.
+And autoscaling can be setup using external tools that interface with the Docker API.
+
+Mesos also has support for autoscaling, but is available only for Mesosphere Enterprise customers ~\cite{mesosphere}.
+Therefore, an external third party tool is necessary for autoscaling in Mesos as well.
+Also, the popularity of Docker Swarm and Kubernetes is eclipsing that of Mesos, driving up community usage and vendor support ~\cite{openhub}.
+
+However, Docker Swarm exposes the same Docker APIs to data center operators ~\cite{docker_swarm}.
+Hence, Docker CLI or Docker Compose ~\cite{docker_compose} can be used to design and describe multi-container applications, which are apt for distributed systems.
+Docker Swarm is, therefore, the easiest to set up for data center operators.
+And adminintrators can pick and choose their third party external tools to integrate into their container engine and orchestration tool to provide the extra features that are necessary.
 
 \subsection{Caveats}
 
+Some tools like Chef exhibit vendor lock-in by enforcing the use of the Chef Developer Kit.
+The description of the desired configuration of the cluster and the network is written in a declarative language that cannot be easily converted to the formats used by Ansible.
 
+Some like Openstack follow the standard set by the community and consortium of cloud software providers.
+But, Openstack is for quickly setting up bare metal physical machines and quickly building up a data center or a cloud.
+And Openstack Heat is the component that orchestrates the setup and management of Openstack ~\cite{openstack}.
 
+Documentation is still extremely limited for the container orchestration tools.
+Since the tools have been developed only in the past few years, some of the interfaces are not stabilized for long term use yet.
+Therefore whatever frontend the data center operator uses to interface with Docker Swarm or Kubernetes or Mesos, it may quickly become incompatible with a newer release of the orchestration tool or the Docker Container Engine.
 
 %-------------------------------------------------------------------------
 \section{Future of Orchestration}
 
+For a data center operators, cluster adminstrators and also distributed application developers, automation and ease of management is necessary for greater efficiency.
+While the current orchestration tools have similar architectures, and also provide similar functionality, there is always scope for improvement.
+Small gains in performance, scalability or even ease of use improves the efficiency of operating a distibuted cluster.
+Due to the scale of data centers and the cloud, small gains could translate to significant increases in performance, scalability and significant decreases in power consumption and other costs of operations.
 
+There is a dearth of scholarly work in this field, especially regarding the evaluation of modern container orchestration tools when it comes to performance and scalability.
+However, this could be because the tools are still under constant rapid development, trying to outdo one another.
+And a paper that comprehensively evaluates them could get quickly outdated.
+This is especially true when some of the components involved in the software infrastructure of container orchestration are also the same for different orchestration tools ~\cite{intro_docker}.
+
+The use of virtual machine orchestration tools like Ansible and Chef shall decrease however, as modern distributed applications are more suitable to be run in containers.
+Openstack and its orchestration component Heat shall continue to be used to set up bare metal physical machines, each one would have an operating system and a container engine can be set up.
+Container orchestration tools can then be used to describe and manage them.
+However, the use of virtual machines will not completely die out, as detailed in the next section.
 
 \subsection{Use of Virtual Machines}
 
+Container Engines running on virtual machines is preferable over running container engines natively over physical machines.
+This is because live migration of virtual machines is easier and more straightforward than live migration of a natively running operating system ~\cite{live_migration}.
+Hence, resource quotas are hit on the physical node, migration of virtual machines is performed by the hypervisor to balance the load on the physical machines.
 
-
-\subsection{Further Innovation and Development}
-
-
+Also, as mentioned previously, virtual machines are necessary for running legacy applications that only run on legacy operating systems and legacy hardware that are very difficult or infeasible to obtain.
+A legacy distributed application would require the use of Openstack Heat to setup the physical machines, Ansible or Chef for virtual machine and application orchestration.
+Since containers do run the application natively, albeit with kernel-level isolation, they are not suitable for running legacy applications.
 
 %-------------------------------------------------------------------------
 \section{Conclusion}
 
-
+The use of orchestration tools for managing containers and virtual machines running on many physical machines is only increasing.
+Orchestration tools provide one important function, and that is the automation of running distributed applications.
+A distributed system consists of many processes, each running in an isolated manner on its own virtual machine or container.
+It is necessary for the administrator to control and manage the entire distributed system as a single entity.
 
 %-------------------------------------------------------------------------
 \bibliographystyle{latex8}
