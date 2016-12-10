@@ -301,12 +301,18 @@ Using Docker CLI or Docker Compose ~\cite{docker_compose}, the entire cluster ca
 
 Kubernetes and Mesos expose their own interfaces which are, of course, incompatible with Docker's own.
 Therefore any multi-container application that is described using Docker Compose would require significant modification to its configuration if another orchestration tool like Kubernetes or Mesos were to be used ~\cite{kubernetes, mesos}.
-But, the developers of these container orchestration tools, container engines and providers of containers as a service have recently established a consortium to help maintain compatibility and also pool in resources to improve containers in general.
-A better collaboration between the orchestration tools would only help the field.
+But, the developers of these container orchestration tools, container engines and providers of containers as a service have recently established a consortium to help maintain compatibility and also pool resources to improve containers in general.
+Better collaboration between the orchestration tools would only assist the field of containers.
 
+The master-slave architecture theoretically has a major flaw; there is a single point of failure.
 The use of the master-slave architecture ~\cite{docker_swarm, kubernetes, mesos}, and a tool like Zookeeper ~\cite{zookeeper} to maintain high availability of the master node does make the use of these orchestration tools for cases that encompass clusters across geographical regions infeasible.
-Since there is only one manager node operational at any given point of time, decentralization of these orchestration tools would require significant changes to the way they work.
+Since it is only one manager node operational at any given point of time, decentralization of these orchestration tools would require significant changes to the way they work.
+The use of a consensus algorithm ~\cite{paxos, raft} would be necessary for such a system design.
 
+All three container orchestration tools restart malfunctioning containers and do not advertise the presence of the container to the client until the application is ready to receive requests.
+The cluster's load balancer and autoscaling tool, whichever is configured by the administrator, would automatically ensure that traffic is routed away from failed nodes until the restarted application is ready.
+The master node is always replicated to provide redundancy ~\cite{mesos, kubernetes} and a tool like Zookeeper ~\cite{zookeeper} would ensure that the switching over to secondary master nodes would happen with little or no impact on the worker nodes.
+This way, the master-slave architecture's single point of failure is remedied with a quick recovery process for the master node.
 
 \subsection{Ease of use and other advantages}
 
@@ -389,11 +395,11 @@ A legacy distributed application would require the use of OpenStack Heat to set 
 Since containers do run the application natively, albeit with kernel-level isolation, they are not suitable for running legacy applications.
 
 However, the use of nested virtualization ~\cite{nested} would decrease as more applications are run on containers rather than directly on virtual machines or natively.
-Nested virtualization increases the complexity of the set up and would also make orchestration more difficult to achieve.
-Data center operators would want to choose the simpler methods that would provide the same guarentees of security and isolation for running their client's applications.
+Nested virtualization increases the complexity of the setup and would also make orchestration harder to achieve.
+Data center operators would want to choose the simpler methods that would provide the same guarantees of security and isolation for running their client's applications.
 
 %-------------------------------------------------------------------------
-\section{Conclusion}
+\section{Conclusion and Future Work}
 
 The use of orchestration tools for managing containers and virtual machines running on many physical machines is only increasing.
 Orchestration tools provide one important function among many others, and that is the automation of running distributed systems.
@@ -403,6 +409,11 @@ It is necessary for the administrator to control and manage the entire distribut
 While the dearth of scholarly work in this field has not hampered the increasing popularity and the development of container orchestration tools, it has made it harder for data center operators, administrators, site reliability and test engineers and even application developers to make an informed choice about their orchestration tool.
 There are many whitepapers and articles by the developers of the orchestration tools themselves that explain and evaluate their tool.
 After reviewing some of the evaluations performed by the developers themselves, they are, in our opinion, subject to bias.
+Hence, a forthcoming paper that carries out a comprehensive performance and scalability evaluation would be desired.
+
+Benchmarking tools for container orchestration are also not very popular at the time of writing this paper.
+They are still under heavy development or are poorly documented.
+A future paper that describes a comprehensive benchmarking tool that can interface with various container engines and container orchestration tools would also be desired.
 
 Orchestration in general for distributed systems is not new, and there have been many papers written on the subject.
 For example, one describes how a geo-replicated or a cluster distributed across a large geographical distance could be orchestrated using the internet while maintaining security ~\cite{intro_orchestration}.
