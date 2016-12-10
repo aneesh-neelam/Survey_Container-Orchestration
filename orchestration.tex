@@ -299,9 +299,14 @@ Docker Swarm exposes the same Docker API to administrators ~\cite{docker_swarm}.
 Therefore, the same frontends that use the Docker Container Engine can be used to control the Swarm.
 Using Docker CLI or Docker Compose ~\cite{docker_compose}, the entire cluster can be managed.
 
-Kubernetes and Mesos expose their own interfaces.
-These interfaces are, of course, incompatible with Docker's own.
+Kubernetes and Mesos expose their own interfaces which are, of course, incompatible with Docker's own.
 Therefore any multi-container application that is described using Docker Compose would require significant modification to its configuration if another orchestration tool like Kubernetes or Mesos were to be used ~\cite{kubernetes, mesos}.
+But, the developers of these container orchestration tools, container engines and providers of containers as a service have recently established a consortium to help maintain compatibility and also pool in resources to improve containers in general.
+A better collaboration between the orchestration tools would only help the field.
+
+The use of the master-slave architecture ~\cite{docker_swarm, kubernetes, mesos}, and a tool like Zookeeper ~\cite{zookeeper} to maintain high availability of the master node does make the use of these orchestration tools for cases that encompass clusters across geographical regions infeasible.
+Since there is only one manager node operational at any given point of time, decentralization of these orchestration tools would require significant changes to the way they work.
+
 
 \subsection{Ease of use and other advantages}
 
@@ -382,6 +387,10 @@ Hence, resource quotas are hit on the physical node, migration of virtual machin
 Also, as mentioned previously, virtual machines are necessary for running legacy applications that only run on legacy operating systems and legacy hardware that are very difficult or infeasible to obtain.
 A legacy distributed application would require the use of OpenStack Heat to set up the physical machines, Ansible or Chef for a virtual machine and application orchestration.
 Since containers do run the application natively, albeit with kernel-level isolation, they are not suitable for running legacy applications.
+
+However, the use of nested virtualization ~\cite{nested} would decrease as more applications are run on containers rather than directly on virtual machines or natively.
+Nested virtualization increases the complexity of the set up and would also make orchestration more difficult to achieve.
+Data center operators would want to choose the simpler methods that would provide the same guarentees of security and isolation for running their client's applications.
 
 %-------------------------------------------------------------------------
 \section{Conclusion}
