@@ -99,7 +99,7 @@ We then discuss possible future work in the field in Section 5, and we then conc
   \centering
     \includegraphics[width=\textwidth]{container_vm}
     \caption{Differences between Virtual Machines and Containers ~\cite{intro_containerisation}}
-  \label{overflow}}
+  \label{overflow}
 \end{figure*}
 
 %-------------------------------------------------------------------------
@@ -116,7 +116,7 @@ Virtualization technology is now decades old, with every major operating system 
 For example, the Linux kernel has KVM and Microsoft Windows Server has Hyper-V.
 Both also have well-documented endpoints for various front-ends to interface with, providing data center operators and server administrators with many tools to automate and manage their machines.
 
-A similar development is going on with containers on these operating systems as well. Like Cgroups in the Linux kernel, Hypervisor.framework in Apple macOS and Hyper-V in Microsoft Windows.
+A similar development has been going on with containers on these operating systems as well. Like Control Groups (cgroups) in the Linux kernel ~\cite{cgroups}, Hypervisor.Framework ~\cite{hypervisor_framework} in Apple macOS and Hyper-V in Microsoft Windows ~\cite{hyperv_containers}.
 Container engines that provide a cross-platform frontend but make use of the respective container support structure in the host operating system have been developed, of which the most prominent is Docker ~\cite{intro_docker}.
 
 Virtual machines are a complete hardware virtualization, and there is a full-fledged guest operating system on which applications are run. Virtual machines enable the use of legacy applications that require legacy operating systems that only run on legacy hardware.
@@ -169,7 +169,7 @@ Hence, orchestration tools for both are used in most data centers.
   \centering
     \includegraphics[width=\textwidth]{docker_swarm}
     \caption{Overview of Docker Swarm ~\cite{platform9_dockerswarm_kubernetes}}
-  \label{overflow}}
+  \label{overflow}
 \end{figure*}
 
 \subsection{Virtual Machine Orchestration}
@@ -221,7 +221,7 @@ As depicted in Figure 4, the same Docker API that is used by so many frontends i
 Kubernetes is an orchestration tool developed by engineers at Google.
 Like Docker Swarm, Kubernetes also works with the Docker Container Engine ~\cite{kubernetes}.
 It was originally for internal use only and was designed to orchestrate the use of their internal cluster, Borg ~\cite{borg}.
-But with the advances in containerization and the increasing use of containers to isolate applications, Google gave away some of the source code behind Kubernetes ~\cite{kubernetes_github}.
+But with the advances in containerisation and the increasing use of containers to isolate applications, Google gave away some of the source code behind Kubernetes ~\cite{kubernetes_github}.
 As illustrated in Figure 6, Kubernetes has a master-slave architecture ~\cite{platform9_dockerswarm_kubernetes}.
 Pods are groups of containers that run on the nodes in the cluster ~\cite{kubernetes}.
 
@@ -229,7 +229,7 @@ Pods are groups of containers that run on the nodes in the cluster ~\cite{kubern
   \centering
     \includegraphics[width=\columnwidth]{kubernetes}
     \caption{Overview of Kubernetes ~\cite{platform9_dockerswarm_kubernetes}}
-  \label{fig:kubernetes}}
+  \label{fig:kubernetes}
 \end{figure}
 
 Mesos is another orchestration tool that manages containers ~\cite{mesos}.
@@ -238,13 +238,13 @@ As depicted in Figure 7, Mesos has a master-slave architecture, like Docker Swar
 The Mesos kernel runs on every node in the cluster.
 This enables the interfacing between the Mesos slave nodes and the Mesos master node.
 Using a coordination tool, like Zookeeper ~\cite{zookeeper}, the availability of the mesos master can be maintained by switching over to the master replicas when a master failure occurs.
-Mesos has frameworks for Hadoop and MPI; that application developers can use to build and run their Hadoop or MPI jobs using Mesos ~\cite{mesos}.
+Mesos has frameworks for Hadoop MapReduce ~\cite{mapreduce} and MPI; that application developers can use to build and run their Hadoop or MPI jobs using Mesos ~\cite{mesos}.
 
 \begin{figure*}
   \centering
     \includegraphics[width=\textwidth]{mesos}
     \caption{Mesos Architecture ~\cite{mesos}}
-  \label{overflow}}
+  \label{overflow}
 \end{figure*}
 
 %-------------------------------------------------------------------------
@@ -252,7 +252,7 @@ Mesos has frameworks for Hadoop and MPI; that application developers can use to 
 
 Orchestration tools are vital for Developer Operations (DevOps).
 But there is a real dearth of scholarly research work on the orchestration tools mentioned previously here.
-Therefore, we have also referenced whitepapers; documentation provided to data center operators,  and performance and scalability results from benchmarking organizations ~\cite{orchestration}.
+Therefore, we have also referenced whitepapers; documentation provided to data center operators,  and performance and scalability resulting from benchmarking organizations ~\cite{orchestration}.
 As we have already seen, Orchestration tools, for the most part, are quite similar in nature.
 All of them attempt to solve some of the same kinds of problems, and some also in similar or even identical manners.
 
@@ -263,15 +263,45 @@ Also, we shall be comparing their ease of use, their community support and their
 
 \subsection{Performance and Scalability}
 
-Virtual machines will obviously be slower than containers. Hence we shall not be comparing them.
+Virtual machines will obviously be slower than containers ~\cite{intro_containerisation}.
+Therefore we shall not be comparing the performance of virtual machines against containers.
 However, we shall be comparing the various container orchestration tools: Docker Swarm, Kubernetes, and Mesos ~\cite{docker_swarm, kubernetes, mesos}.
 
 The developers of Docker Swarm claim that it can scale up to tens of thousands of containers with little performance degradation, whereas Kubernetes is an order of magnitude less scalable ~\cite{docker_swarm}.
-But, benchmarks have proven that Docker Swarm provides much better performance than Kubernetes ~\cite{dockerswarm_vs_kubernetes}.
+Benchmarks by third party entities have proven that Docker Swarm provides much better performance than Kubernetes ~\cite{dockerswarm_vs_kubernetes}.
+Kubernetes does have other advantages as described in the following sections, however.
+
+Mesos, like Kubernetes, performs load balancing and autoscaling based on the CPU usage of the machine ~\cite{mesos}.
+While the scalability of Mesos has not been extensively evaluated, at least when compared to Kubernetes, Mesosphere has simulated Mesos to scale to tens of thousands of nodes ~\cite{mesosphere_simulation}.
+
+Due to a lack of infrastructure, we have not run the benchmarks ourselves.
+However, a later paper could entail more detailed performance and scalability benchmarks and analysis.
 
 \subsection{Protocols used}
 
+In all orchestration tools that we have discussed in this paper, the communication between the manager node and the worker nodes is secured using standard encryption ~\cite{ansible, chef, openstack, docker_swarm, kubernetes, mesos}.
+The Ansible server rightly uses the SSH protocol to communicate with the Ansible clients ~\cite{ansible}.
+Therefore, it is necessary to configure public-private key based authentication for Ansible to function.
+The Chef server uses a custom network protocol to communicate with the Chef clients ~\cite{chef}.
+OpenStack uses the hardware firmware to boot up via the high-speed InfiniBand network that is typically used in data centers ~\cite{openstack, intro_infiniband}.
 
+The Docker Swarm manager provides a DNS name for every container in the cluster ~\cite{intro_docker}.
+Using the discovery service backend and by creating overlay networks, docker swarm, and the other Docker nodes can easily communicate with one another.
+In Kubernetes, The group of containers running on a host is called a pod.
+The Kubernetes network model allows a pod to communicate with any other pod in the cluster.
+
+Like Docker Swarm, Kubernetes also creates an overlay network for this to be feasible ~\cite{platform9_dockerswarm_kubernetes}.
+But, Mesos primarily makes use of Network Address Translation to facilitate communication between containers.
+Since ports on a physical machine are a limited resource, the size of the cluster is severely constrained.
+However, using by integrating a third-party tool into Mesos, an IP address can be assigned to every container, enabling easier communication ~\cite{platform9_mesos_kubernetes}.
+
+Docker Swarm exposes the same Docker API to administrators ~\cite{docker_swarm}.
+Therefore, the same frontends that use the Docker Container Engine can be used to control the Swarm.
+Using Docker CLI or Docker Compose ~\cite{docker_compose}, the entire cluster can be managed.
+
+Kubernetes and Mesos expose their own interfaces.
+These interfaces are, of course, incompatible with Docker's own.
+Therefore any multi-container application that is described using Docker Compose would require significant modification to its configuration if another orchestration tool like Kubernetes or Mesos were to be used ~\cite{kubernetes, mesos}.
 
 \subsection{Ease of use and other advantages}
 
@@ -279,7 +309,7 @@ Ansible and Chef are used to manage applications running on virtual machines on 
 Both are quite similar in their use cases.
 Chef is more full-fledged as it requires the use of the Chef Developer Kit to configure and describe a cluster ~\cite{chef}.
 
-Kubernetes, Docker Swarm, and Mesos all can use same Docker Container Engine ~\cite{kubernets, docker_swarm, mesos}.
+Kubernetes, Docker Swarm, and Mesos all can use same Docker Container Engine ~\cite{kubernetes, docker_swarm, mesos}.
 While Mesos also has support for its own Mesos Container Engine, the use of Docker Container Engine is almost ubiquitous in the container community ~\cite{intro_docker}.
 The use of Docker Container Engine enables the use of the Docker repository for pulling commonly used configurations and applications on Docker.
 Since the Docker community is so vast, the documentation, technical support, and compatibility are, in our opinion, in a good state.
@@ -316,6 +346,8 @@ And OpenStack Heat is the component that orchestrates the setup and management o
 Documentation is still extremely limited for the container orchestration tools.
 Since the tools have been developed only in the past few years, some of the interfaces are not stabilized for long term use yet.
 Therefore whatever frontend the data center operator uses to interface with Docker Swarm or Kubernetes or Mesos, it may quickly become incompatible with a newer release of the orchestration tool or the Docker Container Engine.
+The use of Docker Container Engine for every container orchestration tool may make it easier to transition to another orchestration tool.
+However, it would also make the application dependent on Docker itself.
 
 %-------------------------------------------------------------------------
 \section{Future of Orchestration}
@@ -329,6 +361,12 @@ There is a dearth of scholarly work in this field, especially regarding the eval
 However, this could be because the tools are still under continuous rapid development, trying to outdo one another.
 And a paper that comprehensively evaluates them could get quickly outdated.
 This is particularly the case when some of the components involved in the software infrastructure of container orchestration are also the same for different orchestration tools ~\cite{intro_docker}.
+
+With the increasing use of geo-replicated clusters for lower latency for clients across the world ~\cite{georeplicated}, orchestration tools that can manage clusters that span across the globe would be necessary.
+However, the master-slave architecture would not be practical due to the significant network latency involved.
+Therefore, a more decentralized but yet one where the administrator can control and manage the entire cluster as one entity would be necessary.
+Perhaps by using a consensus protocol like Paxos ~\cite{paxos}, or Raft ~\cite{raft}, one can attempt to decentralize the system by ensuring that orchestration could be done by communicating any one node in the cluster.
+The use of Zookeeper ~\cite{zookeeper} for ensuring the high availability of the manager node in the swarm would not be necessary as the points of failure would increase if decentralization is done.
 
 The use of virtual machine orchestration tools like Ansible and Chef shall decrease, however, as modern distributed applications are more suitable to be run in containers.
 OpenStack and its orchestration component Heat shall continue to be used to set up bare metal physical machines; each one would have an operating system, and a container engine can be configured.
@@ -349,9 +387,17 @@ Since containers do run the application natively, albeit with kernel-level isola
 \section{Conclusion}
 
 The use of orchestration tools for managing containers and virtual machines running on many physical machines is only increasing.
-Orchestration tools provide one important function, and that is the automation of running distributed applications.
+Orchestration tools provide one important function among many others, and that is the automation of running distributed systems.
 A distributed system consists of many processes, each running in an isolated manner in its own virtual machine or container.
 It is necessary for the administrator to control and manage the entire distributed system as a single entity.
+
+While the dearth of scholarly work in this field has not hampered the increasing popularity and the development of container orchestration tools, it has made it harder for data center operators, administrators, site reliability and test engineers and even application developers to make an informed choice about their orchestration tool.
+There are many whitepapers and articles by the developers of the orchestration tools themselves that explain and evaluate their tool.
+After reviewing some of the evaluations performed by the developers themselves, they are, in our opinion, subject to bias.
+
+Orchestration in general for distributed systems is not new, and there have been many papers written on the subject.
+For example, one describes how a geo-replicated or a cluster distributed across a large geographical distance could be orchestrated using the internet while maintaining security ~\cite{intro_orchestration}.
+However, the purpose of this survey was to help data center operators choose the right container orchestration tool.
 
 %-------------------------------------------------------------------------
 \bibliographystyle{latex8}

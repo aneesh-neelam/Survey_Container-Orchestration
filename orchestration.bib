@@ -172,6 +172,12 @@
    note = {Accessed: 2016-12-09}
 }
 
+@misc{platform9_mesos_kubernetes,
+   title = "Platform9: {Container} {Orchestration} {Tools}: {Compare} {Mesos} vs {Docker Swarm}",
+   howpublished = {\url{https://platform9.com/blog/compare-kubernetes-vs-mesos/}},
+   note = {Accessed: 2016-12-09}
+}
+
 @misc{kubernetes_github,
    title = "{Kubernetes} on {GitHub}",
    howpublished = {\url{https://github.com/kubernetes/kubernetes}},
@@ -235,4 +241,109 @@
    title = "Evaluating Container Platforms at Scale",
    howpublished = {\url{https://medium.com/on-docker/evaluating-container-platforms-at-scale-5e7b44d93f2c}},
    note = {Accessed: 2016-12-09}
+}
+
+@misc{cgroups,
+   title = "Linux cGroups",
+   howpublished = {\url{https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt}},
+   note = {Accessed: 2016-12-09}
+}
+
+@misc{hypervisor_framework,
+   title = "Hypervisor.Framework",
+   howpublished = {\url{https://developer.apple.com/reference/hypervisor}},
+   note = {Accessed: 2016-12-09}
+}
+
+@misc{hyperv_containers,
+   title = "{Hyper-V} {Containers}",
+   howpublished = {\url{https://msdn.microsoft.com/en-us/virtualization/windowscontainers/management/hyperv_container}},
+   note = {Accessed: 2016-12-09}
+}
+
+@misc{mesosphere_simulation,
+   title = "Visualizing 50000 live containers",
+   howpublished = {\url{https://mesosphere.com/blog/2015/10/06/visualizing-50000-live-containers-how-we-built-our-mesoscon-15-demo/}},
+   note = {Accessed: 2016-12-09}
+}
+
+@Article{intro_orchestration,
+   author="Misra, Jayadev and Cook, William R.",
+   title="Computation Orchestration",
+   journal="Software {\&} Systems Modeling",
+   year="2007",
+   volume="6",
+   number="1",
+   pages="83--110",
+   abstract="The widespread deployment of networked applications and adoption of the internet has fostered an environment in which many distributed services are available. There is great demand to automate business processes and workflows among organizations and individuals. Solutions to such problems require orchestration of concurrent and distributed services in the face of arbitrary delays and failures of components and communication. We propose a novel approach, called Orc for orchestration, that supports a structured model of concurrent and distributed programming. This model assumes that basic services, like sequential computation and data manipulation, are implemented by primitive sites. Orc provides constructs to orchestrate the concurrent invocation of sites to achieve a goal -- while managing time-outs, priorities, and failure of sites or communication.",
+   issn="1619-1374",
+   doi="10.1007/s10270-006-0012-1",
+   url="http://dx.doi.org/10.1007/s10270-006-0012-1"
+}
+
+@inproceedings {georeplicated,
+   author = {Cheng Li and Daniel Porto and Allen Clement and Johannes Gehrke and Nuno Pregui{\c c}a and Rodrigo Rodrigues},
+   title = {Making Geo-Replicated Systems Fast as Possible, Consistent when Necessary},
+   booktitle = {Presented as part of the 10th USENIX Symposium on Operating Systems Design and Implementation (OSDI 12)},
+   year = {2012},
+   isbn = {978-1-931971-96-6},
+   address = {Hollywood, CA},
+   pages = {265--278},
+   url = {https://www.usenix.org/conference/osdi12/technical-sessions/presentation/li},
+   publisher = {USENIX},
+}
+
+@inproceedings{raft,
+   author = {Ongaro, Diego and Ousterhout, John},
+   title = {In Search of an Understandable Consensus Algorithm},
+   booktitle = {Proceedings of the 2014 USENIX Conference on USENIX Annual Technical Conference},
+   series = {USENIX ATC'14},
+   year = {2014},
+   isbn = {978-1-931971-10-2},
+   location = {Philadelphia, PA},
+   pages = {305--320},
+   numpages = {16},
+   url = {http://dl.acm.org/citation.cfm?id=2643634.2643666},
+   acmid = {2643666},
+   publisher = {USENIX Association},
+   address = {Berkeley, CA, USA},
+}
+
+@article{paxos,
+   author = {Lamport, Leslie},
+   title = {The Part-time Parliament},
+   journal = {ACM Trans. Comput. Syst.},
+   issue_date = {May 1998},
+   volume = {16},
+   number = {2},
+   month = may,
+   year = {1998},
+   issn = {0734-2071},
+   pages = {133--169},
+   numpages = {37},
+   url = {http://doi.acm.org/10.1145/279227.279229},
+   doi = {10.1145/279227.279229},
+   acmid = {279229},
+   publisher = {ACM},
+   address = {New York, NY, USA},
+   keywords = {state machines, three-phase commit, voting},
+}
+
+@article{mapreduce,
+   author = {Dean, Jeffrey and Ghemawat, Sanjay},
+   title = {MapReduce: Simplified Data Processing on Large Clusters},
+   journal = {Commun. ACM},
+   issue_date = {January 2008},
+   volume = {51},
+   number = {1},
+   month = jan,
+   year = {2008},
+   issn = {0001-0782},
+   pages = {107--113},
+   numpages = {7},
+   url = {http://doi.acm.org/10.1145/1327452.1327492},
+   doi = {10.1145/1327452.1327492},
+   acmid = {1327492},
+   publisher = {ACM},
+   address = {New York, NY, USA},
 }
