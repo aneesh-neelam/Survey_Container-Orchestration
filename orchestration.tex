@@ -96,10 +96,10 @@ In Section 4, we analyze the limitations, evaluate the performance and ease of u
 We then discuss possible future work in the field in Section 5, and we then conclude in Section 6.
 
 \begin{figure*}
-\centering
-  \includegraphics[width=\textwidth]{container_vm}
+  \centering
+    \includegraphics[width=\textwidth]{container_vm}
     \caption{Differences between Virtual Machines and Containers ~\cite{intro_containerisation}}
-      \label{overflow}}
+  \label{overflow}}
 \end{figure*}
 
 %-------------------------------------------------------------------------
@@ -165,6 +165,13 @@ Figure 3 illustrates the use of containers for this use case ~\cite{container_sh
 Therefore, data center operators use a combination of virtual machines and containers on their physical clusters.
 Hence, orchestration tools for both are used in most data centers.
 
+\begin{figure*}
+  \centering
+    \includegraphics[width=\textwidth]{docker_swarm}
+    \caption{Overview of Docker Swarm ~\cite{platform9_dockerswarm_kubernetes}}
+  \label{overflow}}
+\end{figure*}
+
 \subsection{Virtual Machine Orchestration}
 
 As mentioned previously in this paper, the use of virtual machines is still necessary when a full-fledged guest operating system is needed.
@@ -172,17 +179,29 @@ This is especially true when running legacy applications that require legacy ope
 But advances in automation and orchestration can be applied to machines that emulate legacy hardware as well.
 
 Ansible is an automation tool for managing massive physical clusters and deploying applications on them ~\cite{ansible}.
+However, Ansible does not manage the native operating system running on the physical server, but the virtual machines and applications running on it.
 It is made up of many components, not all relevant for this survey.
 We shall focus on the orchestration capabilities of Ansible.
 An admininstrator can execute hundreds or thousands of virtual machines, specifying an operating system and application image with a complex network configuration set up between them.
 Configuration is predetermined by the adminstrator, written into config file(s) and specified when running the orchestration tool.
 
-\begin{figure*}
-\centering
-  \includegraphics[width=\textwidth]{docker_swarm}
-    \caption{Overview of Docker Swarm ~\cite{platform9_dockerswarm_kubernetes}}
-      \label{overflow}}
-\end{figure*}
+Chef works similarly to Ansible ~\cite{chef}, and orchestrates only the virtual machines and applications.
+Like Ansible, Chef also follows the master-slave architecture as depicted in Figure 5 ~\cite{chef_overiew}.
+Chef server contains the information about the Chef clients, which are the other nodes in the cluster.
+The Chef clients pull the specified configuration from the server sets up the nodes in the cluster.
+Application developers can make use of the Chef Developer Kit to easily design and build the configuration and the applications.
+This configuration is then pushed to the Chef server.
+
+\begin{figure}[thpb]
+  \centering
+  	\includegraphics[width=\columnwidth]{chef}
+    \caption{Overview of Chef ~\cite{chef_overview}}
+	\label{fig:chef}
+\end{figure}
+
+Openstack Heat is another orchestration tool that can be used to manage bare physical servers ~\cite{openstack}.
+Administrators can describe their cluster and specify the applications that are desired to run using a declarative language.
+It can be used in conjunction with Ansible or Chef to control the entire data center infrasturcture.
 
 \subsection{Container Orchestration}
 
@@ -203,14 +222,29 @@ Kubernetes is a orchestration tool developed by engineers at Google.
 Like Docker Swarm, Kubernetes also works with the Docker Container Engine ~\cite{kubernetes}.
 It was originally for internal use only and was designed to orchestrate the use of their internal cluster, Borg ~\cite{borg}.
 But with the advances in containerization and the increasing use of containers to isolate applications, Google gave away some of the source code behind Kubernetes ~\cite{kubernetes_github}.
-As illustrated in Figure 5, Kubernetes has a master-slave architecture ~\cite{platform9_dockerswarm_kubernetes}.
+As illustrated in Figure 6, Kubernetes has a master-slave architecture ~\cite{platform9_dockerswarm_kubernetes}.
 Pods are groups of containers that run on the nodes in the cluster ~\cite{kubernetes}.
 
-\begin{figure*}
-\centering
-  \includegraphics[width=\columnwidth]{kubernetes}
+\begin{figure}[thpb]
+  \centering
+    \includegraphics[width=\columnwidth]{kubernetes}
     \caption{Overview of Kubernetes ~\cite{platform9_dockerswarm_kubernetes}}
-      \label{fig:kubernetes}}
+  \label{fig:kubernetes}}
+\end{figure}
+
+Mesos is another orchestration tool that manages containers ~\cite{mesos}.
+Mesos, like Docker Swarm and Kubernetes, allows for data center operators to control the entire data center as a single entity.
+As depicted in Figure 7, Mesos has a master-slave architecture, like Docker Swarm and Kubernetes.
+The Mesos kernel runs on every node in the cluster.
+This enables the interfacing betwen the Mesos slave nodes and the Mesos master node.
+Using a coordination tool, like Zookeeper ~\cite{zookeeper}, the availability of the mesos master can be maintained by switching over to the master replicas when a master failure occurs.
+Mesos has frameworks for Hadoop and MPI, that application developers can use to build and run their Hadoop or MPI jobs using Mesos ~\cite{mesos}.
+
+\begin{figure*}
+  \centering
+    \includegraphics[width=\textwidth]{mesos}
+    \caption{Mesos Architecture ~\cite{mesos}}
+  \label{overflow}}
 \end{figure*}
 
 %-------------------------------------------------------------------------
